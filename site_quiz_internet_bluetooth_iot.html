@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conectados — Internet, Bluetooth e IoT</title>
+<style>
+:root{
+  --bg:#07111f; --card:#0d1b2e; --card2:#11243b; --text:#eef6ff;
+  --muted:#a9bdd3; --primary:#48b8ff; --secondary:#7c6cff;
+  --green:#43d17a; --red:#ff6075; --border:#203953;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);
+  background:radial-gradient(circle at 20% 0%,#12345a 0,#07111f 38%),var(--bg);
+  line-height:1.6;
+}
+header{
+  min-height:88vh;display:flex;align-items:center;justify-content:center;text-align:center;
+  padding:60px 20px;position:relative;overflow:hidden;
+}
+header:before,header:after{
+  content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.35;
+}
+header:before{width:280px;height:280px;background:#3c8dff;top:-100px;left:-100px}
+header:after{width:360px;height:360px;background:#775cff;right:-150px;bottom:-170px}
+.hero{max-width:900px;position:relative;z-index:1}
+.badge{
+  display:inline-block;padding:7px 14px;border:1px solid #2e5679;border-radius:999px;
+  color:#8ed4ff;background:#0b2137;font-size:.9rem;font-weight:700
+}
+h1{font-size:clamp(3rem,8vw,6.5rem);line-height:.95;margin:20px 0 24px;
+  background:linear-gradient(90deg,#fff,#61c4ff,#9b8cff);-webkit-background-clip:text;color:transparent}
+.hero p{font-size:1.2rem;color:var(--muted);max-width:700px;margin:0 auto 30px}
+.btn{
+  display:inline-block;border:0;border-radius:14px;padding:14px 22px;font-weight:800;
+  cursor:pointer;color:white;background:linear-gradient(135deg,var(--primary),var(--secondary));
+  text-decoration:none;box-shadow:0 10px 30px #0005;transition:.2s
+}
+.btn:hover{transform:translateY(-2px)}
+nav{
+  position:sticky;top:0;z-index:10;background:#07111fe8;backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:12px
+}
+nav a{color:var(--muted);text-decoration:none;padding:8px 13px;border-radius:10px;font-weight:700}
+nav a:hover{background:var(--card2);color:white}
+main{max-width:1100px;margin:auto;padding:35px 18px 80px}
+section{margin:55px 0}
+.section-title{font-size:2.2rem;margin-bottom:8px}
+.section-sub{color:var(--muted);margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.card{
+  background:linear-gradient(145deg,#10233a,#0b1728);border:1px solid var(--border);
+  border-radius:20px;padding:24px;box-shadow:0 14px 35px #0003
+}
+.card h3{margin-top:0;color:#75ccff}
+.card .icon{font-size:2.4rem}
+.timeline{border-left:2px solid #315477;margin:25px 0;padding-left:25px}
+.event{position:relative;margin:0 0 25px}
+.event:before{content:"";position:absolute;width:11px;height:11px;background:var(--primary);
+  border-radius:50%;left:-32px;top:8px;box-shadow:0 0 15px var(--primary)}
+.year{font-weight:900;color:#72cbff}
+ol,ul{padding-left:22px}
+.highlight{
+  border:1px solid #315b80;background:#0b2137;border-radius:16px;padding:18px;margin-top:18px
+}
+.quiz{
+  background:linear-gradient(145deg,#0e2035,#0b1728);border:1px solid var(--border);
+  border-radius:24px;padding:28px;box-shadow:0 20px 50px #0004
+}
+.progress{height:10px;background:#1b3046;border-radius:99px;overflow:hidden;margin:10px 0 25px}
+.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));width:0;transition:.3s}
+.question-number{color:#7acbff;font-weight:800}
+.question{font-size:1.4rem;font-weight:800;margin:10px 0 20px}
+.answers{display:grid;gap:12px}
+.answer{
+  width:100%;text-align:left;padding:15px 17px;border-radius:14px;border:1px solid #2a4865;
+  background:#0d1d30;color:white;cursor:pointer;font-size:1rem;transition:.15s
+}
+.answer:hover{background:#152b44;border-color:#4e8cbb}
+.answer.correct{background:#123d2a;border-color:var(--green)}
+.answer.wrong{background:#431c27;border-color:var(--red)}
+.answer:disabled{cursor:default}
+.feedback{min-height:28px;margin:16px 0;font-weight:800}
+.quiz-actions{display:flex;justify-content:flex-end;gap:10px}
+#next{display:none}
+.result{text-align:center;padding:30px 10px}
+.score{font-size:4rem;font-weight:900;background:linear-gradient(90deg,#58c8ff,#9184ff);
+-webkit-background-clip:text;color:transparent}
+.hidden{display:none}
+footer{text-align:center;color:var(--muted);padding:35px 20px;border-top:1px solid var(--border)}
+@media(max-width:600px){.card{padding:19px}.quiz{padding:20px}.section-title{font-size:1.8rem}}
+</style>
+</head>
+<body>
+
+<header id="inicio">
+  <div class="hero">
+    <span class="badge">📚 Projeto de Tecnologia</span>
+    <h1>CONectados</h1>
+    <p>Descubra como a Internet, o Bluetooth e a Internet das Coisas transformaram a nossa maneira de se comunicar e viver.</p>
+    <a class="btn" href="#conteudo">Começar a explorar ↓</a>
+  </div>
+</header>
+
+<nav>
+  <a href="#internet">🌐 Internet</a>
+  <a href="#bluetooth">📡 Bluetooth</a>
+  <a href="#iot">💡 IoT</a>
+  <a href="#quiz">🧠 Quiz</a>
+</nav>
+
+<main id="conteudo">
+
+<section id="internet">
+  <h2 class="section-title">1. História da Internet 🌐</h2>
+  <p class="section-sub">Da ARPANET à rede mundial que usamos hoje.</p>
+  <div class="grid">
+    <div class="card">
+      <div class="icon">🌍</div>
+      <h3>O que é a Internet?</h3>
+      <p>É uma grande rede que conecta computadores e dispositivos para compartilhar informações.</p>
+    </div>
+    <div class="card">
+      <div class="icon">⚡</div>
+      <h3>Internet e tecnologia</h3>
+      <p>A Internet permite comunicação rápida e compartilhamento de informações entre dispositivos em diferentes lugares.</p>
+    </div>
+  </div>
+  <div class="timeline">
+    <div class="event"><div class="year">1969</div><strong>ARPANET</strong><br>A rede foi criada nos EUA e conectava computadores de universidades e centros de pesquisa.</div>
+    <div class="event"><div class="year">1989</div><strong>World Wide Web</strong><br>Tim Berners-Lee criou a World Wide Web (WWW).</div>
+    <div class="event"><div class="year">Década de 1990</div><strong>Popularização</strong><br>A Internet começou a se popularizar entre as pessoas.</div>
+    <div class="event"><div class="year">Hoje</div><strong>Um mundo conectado</strong><br>A Internet conecta pessoas, empresas e dispositivos no mundo todo.</div>
+  </div>
+</section>
+
+<section id="bluetooth">
+  <h2 class="section-title">2. Bluetooth 📡</h2>
+  <p class="section-sub">Conexão sem fio para dispositivos próximos.</p>
+  <div class="grid">
+    <div class="card">
+      <div class="icon">📱</div>
+      <h3>O que é?</h3>
+      <p>É uma tecnologia sem fio que conecta dispositivos próximos sem usar cabos.</p>
+    </div>
+    <div class="card">
+      <div class="icon">👑</div>
+      <h3>De onde veio o nome?</h3>
+      <p>O nome Bluetooth vem de Harald Bluetooth, rei dinamarquês.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🔋</div>
+      <h3>Bluetooth e IoT</h3>
+      <p>O Bluetooth Low Energy (BLE) é muito usado na IoT porque consome pouca energia.</p>
+    </div>
+  </div>
+  <div class="highlight">
+    <strong>📌 Linha do tempo:</strong>
+    <ul>
+      <li><strong>Década de 1990:</strong> desenvolvido pela Ericsson.</li>
+      <li><strong>1998:</strong> surgiu o Bluetooth SIG.</li>
+      <li><strong>1999:</strong> lançada a primeira versão oficial.</li>
+    </ul>
+    <p><strong>Importante:</strong> Bluetooth não é a Internet. Ele permite que dispositivos próximos se comuniquem e troquem dados.</p>
+  </div>
+</section>
+
+<section id="iot">
+  <h2 class="section-title">3. IoT no nosso dia a dia 💡</h2>
+  <p class="section-sub">Objetos conectados, dados e automação.</p>
+  <div class="card">
+    <h3>O que é IoT?</h3>
+    <p>IoT (Internet das Coisas) é a conexão de objetos à Internet ou a outros dispositivos para coletar, enviar e receber dados.</p>
+  </div>
+  <div class="grid" style="margin-top:18px">
+    <div class="card"><h3>1️⃣ Sensor</h3><p>Coleta informações.</p></div>
+    <div class="card"><h3>2️⃣ Conexão</h3><p>Envia os dados pela Internet, Bluetooth ou outra rede.</p></div>
+    <div class="card"><h3>3️⃣ Processamento</h3><p>Um sistema analisa os dados.</p></div>
+    <div class="card"><h3>4️⃣ Ação</h3><p>O dispositivo realiza uma tarefa automaticamente ou recebe um comando.</p></div>
+  </div>
+  <div class="grid" style="margin-top:18px">
+    <div class="card"><h3>📱 Aplicativos</h3><p>Google Home, Apple Home e SmartThings ajudam a controlar e acompanhar dispositivos conectados.</p></div>
+    <div class="card"><h3>🏠 Exemplos</h3><p>Relógios inteligentes, lâmpadas inteligentes, sensores, casas inteligentes e carros conectados.</p></div>
+    <div class="card"><h3>🚀 Principal vantagem</h3><p>A IoT torna objetos mais inteligentes e automatizados, facilitando tarefas do dia a dia.</p></div>
+  </div>
+</section>
+
+<section id="quiz">
+  <h2 class="section-title">🧠 Quiz: você está conectado?</h2>
+  <p class="section-sub">Teste o que você aprendeu. São 12 perguntas!</p>
+  <div class="quiz">
+    <div id="quizArea">
+      <div class="progress"><span id="progress"></span></div>
+      <div class="question-number" id="qNumber"></div>
+      <div class="question" id="question"></div>
+      <div class="answers" id="answers"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="quiz-actions"><button class="btn" id="next">Próxima →</button></div>
+    </div>
+    <div class="result hidden" id="result">
+      <div>🏆 Resultado final</div>
+      <div class="score" id="score"></div>
+      <h3 id="resultMessage"></h3>
+      <button class="btn" onclick="restartQuiz()">Refazer quiz</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <strong>CONectados</strong> • Projeto sobre Internet, Bluetooth e IoT
+</footer>
+
+<script>
+const questions = [
+ {q:"O que é a Internet?", a:["Um aplicativo de mensagens","Uma grande rede que conecta computadores e dispositivos","Um tipo de Bluetooth","Um sistema de televisão"], c:1},
+ {q:"Em que ano surgiu a ARPANET?", a:["1969","1979","1989","1999"], c:0},
+ {q:"Quem criou a World Wide Web (WWW)?", a:["Steve Jobs","Bill Gates","Tim Berners-Lee","Mark Zuckerberg"], c:2},
+ {q:"Em qual década a Internet começou a se popularizar?", a:["1960","1970","1980","1990"], c:3},
+ {q:"O que é Bluetooth?", a:["Uma tecnologia sem fio para conectar dispositivos próximos","A própria Internet","Um navegador","Um aplicativo de vídeos"], c:0},
+ {q:"De onde vem o nome Bluetooth?", a:["De uma empresa japonesa","De um rei dinamarquês chamado Harald Bluetooth","De uma cidade dos EUA","De um computador antigo"], c:1},
+ {q:"Em que ano surgiu o Bluetooth SIG?", a:["1989","1995","1998","2005"], c:2},
+ {q:"O que significa IoT?", a:["Internet of Things (Internet das Coisas)","Internet Online Technology","Internal Online Transfer","Internet Open Tools"], c:0},
+ {q:"Qual é a primeira etapa do funcionamento de um sistema IoT?", a:["Ação","Processamento","Sensor","Aplicativo"], c:2},
+ {q:"Qual tecnologia Bluetooth é conhecida por consumir pouca energia?", a:["Bluetooth HD","Bluetooth Low Energy (BLE)","Bluetooth Max","Bluetooth Ultra"], c:1},
+ {q:"Qual é um exemplo de IoT no dia a dia?", a:["Lâmpada inteligente","Caderno de papel","Lápis","Livro sem conexão"], c:0},
+ {q:"Qual é uma principal vantagem da IoT?", a:["Deixar os dispositivos mais lentos","Eliminar todos os cabos do mundo","Tornar objetos mais inteligentes e automatizados","Impedir a comunicação entre dispositivos"], c:2}
+];
+
+let current=0, score=0, answered=false;
+const qEl=document.getElementById("question"), aEl=document.getElementById("answers");
+const feedback=document.getElementById("feedback"), next=document.getElementById("next");
+const progress=document.getElementById("progress"), qNumber=document.getElementById("qNumber");
+
+function loadQuestion(){
+  answered=false; next.style.display="none"; feedback.textContent="";
+  const item=questions[current];
+  qNumber.textContent=`Pergunta ${current+1} de ${questions.length}`;
+  qEl.textContent=item.q;
+  progress.style.width=((current)/questions.length*100)+"%";
+  aEl.innerHTML="";
+  item.a.forEach((text,i)=>{
+    const b=document.createElement("button");
+    b.className="answer"; b.textContent=text;
+    b.onclick=()=>selectAnswer(i,b);
+    aEl.appendChild(b);
+  });
+}
+function selectAnswer(i,button){
+  if(answered)return; answered=true;
+  const correct=questions[current].c;
+  document.querySelectorAll(".answer").forEach((b,idx)=>{
+    b.disabled=true;
+    if(idx===correct)b.classList.add("correct");
+  });
+  if(i===correct){score++;feedback.textContent="✅ Muito bem! Resposta correta."}
+  else {button.classList.add("wrong");feedback.textContent="❌ Quase! A resposta correta está destacada."}
+  next.style.display="inline-block";
+}
+next.onclick=()=>{
+  current++;
+  if(current<questions.length)loadQuestion(); else showResult();
+};
+function showResult(){
+  document.getElementById("quizArea").classList.add("hidden");
+  document.getElementById("result").classList.remove("hidden");
+  document.getElementById("score").textContent=`${score}/${questions.length}`;
+  const pct=score/questions.length;
+  document.getElementById("resultMessage").textContent =
+    pct===1 ? "🌟 Perfeito! Você dominou o assunto!" :
+    pct>=.75 ? "🔥 Muito bom! Você está bem conectado!" :
+    pct>=.5 ? "👍 Bom trabalho! Revise alguns pontos e tente novamente." :
+    "📚 Continue estudando! Você vai ficar cada vez mais conectado.";
+}
+function restartQuiz(){
+  current=0;score=0;
+  document.getElementById("result").classList.add("hidden");
+  document.getElementById("quizArea").classList.remove("hidden");
+  loadQuestion();
+}
+loadQuestion();
+</script>
+</body>
+</html>
